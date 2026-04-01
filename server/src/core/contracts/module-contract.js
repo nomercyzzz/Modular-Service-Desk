@@ -1,9 +1,4 @@
-export class ModuleContractError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "ModuleContractError";
-  }
-}
+import { ModuleContractError } from "../errors/module-contract-error.js";
 
 export const MODULE_CONTRACT_KEYS = Object.freeze({
   NAME: "name",
