@@ -1,8 +1,9 @@
-import path from "node:path";
+﻿import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createApp } from "./app.js";
 import { ServiceContainer } from "./core/container/service-container.js";
 import { readAppSettings } from "./core/config/app-settings.js";
+import { resolveModuleStartOrder } from "./core/loader/module-dependency-graph.js";
 import { bootstrapModules } from "./core/loader/module-bootstrapper.js";
 import { loadModuleRegistry } from "./core/loader/module-registry.js";
 import { LoggerService } from "./services/logger.service.js";
@@ -30,8 +31,10 @@ export async function startServer(options = {}) {
     activeModules: appSettings.activeModules
   });
 
+  const orderedModules = resolveModuleStartOrder(modules);
+
   const initializedModules = await bootstrapModules({
-    modules,
+    modules: orderedModules,
     container,
     context: {
       app,
