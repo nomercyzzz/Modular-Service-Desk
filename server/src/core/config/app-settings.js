@@ -26,13 +26,22 @@ async function readConfigFile(filePath) {
 
 function parseJson(rawConfig, filePath) {
   try {
-    return JSON.parse(rawConfig);
+    const safeRawConfig = removeBom(rawConfig);
+    return JSON.parse(safeRawConfig);
   } catch (error) {
     throw new AppSettingsError(
       `Файл конфигурации ${filePath} содержит некорректный JSON.`,
       error
     );
   }
+}
+
+function removeBom(value) {
+  if (typeof value !== "string") {
+    return value;
+  }
+
+  return value.replace(/^\uFEFF/, "");
 }
 
 function normalizeAppSettings(config, filePath) {

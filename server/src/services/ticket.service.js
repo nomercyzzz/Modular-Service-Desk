@@ -1,4 +1,4 @@
-export class TicketService {
+﻿export class TicketService {
   constructor() {
     this.tickets = [];
     this.nextId = 1;
@@ -7,7 +7,7 @@ export class TicketService {
   create(input = {}) {
     const title = typeof input.title === "string" ? input.title.trim() : "";
     if (title.length === 0) {
-      throw new Error('Поле тикета "title" обязательно.');
+      throw createValidationError('Поле тикета "title" обязательно.');
     }
 
     const description =
@@ -39,4 +39,10 @@ export class TicketService {
     const ticket = this.tickets.find((item) => item.id === parsedId);
     return ticket ? { ...ticket } : null;
   }
+}
+
+function createValidationError(message) {
+  const error = new Error(message);
+  error.code = "VALIDATION_ERROR";
+  return error;
 }
